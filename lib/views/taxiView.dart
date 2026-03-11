@@ -846,6 +846,23 @@ class TaxiView extends HookWidget {
                   if (!isServerError.value) {
                     isLoaded.value = true;
                   }
+                },
+                androidOnPermissionRequest:
+                    (controller, origin, resources) async {
+                  if (resources.contains("geolocation")) {
+                    var status = await Permission.location.request();
+                    if (!status.isGranted) {
+                      openAppSettings();
+                    }
+                  }
+                  return PermissionRequestResponse(
+                      resources: resources,
+                      action: PermissionRequestResponseAction.GRANT);
+                },
+                androidOnGeolocationPermissionsShowPrompt:
+                    (InAppWebViewController controller, String origin) async {
+                  return GeolocationPermissionShowPromptResponse(
+                      origin: origin, allow: true, retain: true);
                 }),
           )),
       isTimerUp.value && isLoaded.value && isFcmInit.value
