@@ -507,6 +507,7 @@ class TaxiView extends HookWidget {
                 initialOptions: InAppWebViewGroupOptions(
                     crossPlatform: InAppWebViewOptions(
                         useShouldOverrideUrlLoading: true,
+                        enableViewportScale: true,
                         applicationNameForUserAgent: "taxi-app-webview/" +
                             (Platform.isAndroid ? "android" : "ios"),
                         resourceCustomSchemes: [
