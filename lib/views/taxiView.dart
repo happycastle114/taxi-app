@@ -520,7 +520,8 @@ class TaxiView extends HookWidget {
                     android: AndroidInAppWebViewOptions(
                         useHybridComposition: true,
                         overScrollMode:
-                            AndroidOverScrollMode.OVER_SCROLL_NEVER),
+                            AndroidOverScrollMode.OVER_SCROLL_NEVER,
+                        geolocationEnabled: true),
                     ios: IOSInAppWebViewOptions(disallowOverScroll: true)),
                 // initialUrlRequest: URLRequest(url: Uri.parse(address)),
                 shouldOverrideUrlLoading: (controller, navigationAction) async {
@@ -610,6 +611,22 @@ class TaxiView extends HookWidget {
                           openAppSettings();
                           Fluttertoast.showToast(
                               msg: "알림 권한을 허용해주세요.",
+                              toastLength: Toast.LENGTH_SHORT,
+                              textColor: toastTextColor,
+                              backgroundColor: toastBackgroundColor);
+                          return false;
+                        }
+                      });
+
+                  _controller.value?.addJavaScriptHandler(
+                      handlerName: "try_location",
+                      callback: (args) async {
+                        if (await Permission.locationWhenInUse.isGranted) {
+                          return true;
+                        } else {
+                          openAppSettings();
+                          Fluttertoast.showToast(
+                              msg: "위치 권한을 허용해주세요.",
                               toastLength: Toast.LENGTH_SHORT,
                               textColor: toastTextColor,
                               backgroundColor: toastBackgroundColor);
